@@ -1,0 +1,23 @@
+.centerer{
+    margin: auto;
+    width: 400px;
+}
+
+h1{
+    text-align: center;
+}
+
+.rendering{
+    background: #ffeeec;
+    border:solid hotpink 4px;
+    padding:20px
+}
+
+.highlighter{
+    background: yellow;
+}
+
+.github{
+    padding: 10px 0px;
+    text-align: center;
+}
