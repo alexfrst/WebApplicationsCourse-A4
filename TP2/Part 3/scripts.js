@@ -22,9 +22,15 @@ const UpperCaseButtons = () =>{
 
 const LowerCaseCaseButtons = () =>{
     for(const elem of document.getElementsByTagName("a")){
-        elem.text = elem.text.toLowerCase();
+        elem.text = capitalizeFirstLetter(elem.text.toLowerCase())
+
     }
 }
+const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
 
 const PlaySound = () =>{
     const sound = new Audio("./media/Alarm01.wav");
@@ -33,7 +39,7 @@ const PlaySound = () =>{
 
 const HideAll = () =>{
     for(const elem of document.getElementsByTagName("a")){
-        if(elem.text != "Hover me"){
+        if(elem.text.toUpperCase() != "HOVER ME"){
             elem.style.visibility = "hidden"
         }
     }
@@ -42,7 +48,7 @@ const HideAll = () =>{
 const HelloWorld = () =>{
     let text = document.getElementsByTagName("h1")[0].innerText
     console.log(text)
-    if(text==" "||text=="Hello World"){
+    if(text===" "||text==="Hello World"){
         text = "Bye bye"
     }else{
         text = "Hello World"
@@ -52,8 +58,7 @@ const HelloWorld = () =>{
 
 const ShowAll = () =>{
     for(const elem of document.getElementsByTagName("a")){
-        if(elem.text != "Hover me"){
+
             elem.style.visibility = "visible"
-        }
     }
 }
