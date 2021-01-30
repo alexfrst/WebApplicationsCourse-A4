@@ -87,7 +87,31 @@ NICHOLAS CARR is the author of The Shallows and The Glass Cage: Automation and U
 </body>
 </html>
 
-<script src="">
-    document.getElementsByTagName("p")[0].innerHTML = document.getElementsByTagName("p")[0].innerHTML.replaceAll('Google','<a href="google.com">Google<a/>');
-</script>
+<script>
+    //Find all article words ( not in the whole html only the article !) of more than 7 characters, and highlight them in fluorescent green you can use regexps without a loop, or Split() and String length Property with a loop
+    let text = document.getElementsByTagName("p")[0].innerHTML.replace(/\b\w{7,}\b[\t ]*/sg,exp =>{
+        return(`<span style=\"background-color:#00FF00\">${exp}</span> `)
+    });
 
+
+    //Split blocks of 5 sentences into a paragraph. you can use regexps, JavaScript Split function
+    /*
+    document.getElementsByTagName("p")[0].innerHTML = document.getElementsByTagName("p")[0].innerHTML.replace(/(([^.]+(\.[a-z])?)+.\s){4}/g,exp =>{
+        return(`</p>${exp} CEST LA FIN DU PARAGRAPHE<p>`)
+    });
+    too much recursion
+    */
+    text = text.replace(/([^.]+\.){4}/g,exp =>{
+        return(`</p>${exp} <p>`)
+    })
+
+    //Link all occurences of the word "google" to http://www.google.com
+    text = text.replaceAll('Google','<a href="google.com">Google<a/>');
+
+    //Display article total word count in big bold letter before the text.
+    text = (`<p><b>TOTAL WORD COUNT: ${text.split(' ').length} </b></p>`) + text;
+
+
+    document.getElementsByTagName("p")[0].innerHTML = text;
+
+</script>
