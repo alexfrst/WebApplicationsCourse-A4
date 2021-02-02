@@ -46,19 +46,18 @@ const HideAll = () =>{
 }
 
 const HelloWorld = () =>{
-    let text = document.getElementsByTagName("h1")[0].innerText
+    let text = document.getElementsByClassName("coucou")[0].innerText
     console.log(text)
     if(text===" "||text==="Hello World"){
         text = "Bye bye"
     }else{
         text = "Hello World"
     }
-    document.getElementsByTagName("h1")[0].innerText = text;
+    document.getElementsByClassName("coucou")[0].innerText = text;
 }
 
 const ShowAll = () =>{
     for(const elem of document.getElementsByTagName("a")){
-
             elem.style.visibility = "visible"
     }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width">
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>WebApplication playground</title>
+
+</head>
+<body>
+<div class="nav">
+    <ul>
+        <li><a href="#" onclick="LaunchAnim()" >Color</a></li>
+        <li><a href="#" onclick="ZoomToggler()" >Zoom</a></li>
+        <li><a href="#" onclick="MoveToggler()" >Move</a></li>
+        <li><a href="#" onclick="RotateToggler()" >Rotate</a></li>
+        <li><input type="color" value="#ffffff" id="border"><label class="center" for="border">Begining Border</label></li>
+        <li><input type="color" value="#ffffff" id="bgColor"><label for="bgColor">Begining Background</label></li>
+        <li><input type="color" id="borderEnd"><label for="borderend">Ending border</label></li>
+        <li><input type="color" id="bgColorEnd"><label for="border">Ending Background</label></li>
+    </ul>
+    <div class="center">
+        <div class="marger">
+            <h1 class="center marger">Animation Playground</h1>
+        </div>
+    </div>
+    <div class="center">
+        <div id="4">
+            <div id="3">
+                <div id="2">
+                    <div id="1" class="drawingBox">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
+<script src="script.js" type="text/javascript"></script>
