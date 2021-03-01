@@ -8,7 +8,7 @@ const c = canvas.getContext('2d')
 
 document.getElementById("myCanvas").clientWidth = (window.innerWidth-45).toString()+"px";
 document.getElementById("myCanvas").clientHeight = window.innerHeight.toString()+"px";
-
+let name = null
 document.getElementsByTagName("canvas")[0].style.border="solid black 6px";
 /*
 let myObject = localStorage.getItem("canvas");
@@ -31,6 +31,7 @@ const SetFigType = (type) =>{
 }
 
 const Draw = (copying=false) => {
+    if (name == null) return null;
     const canvas = document.getElementById('myCanvas')
     const c = canvas.getContext('2d')
     c.strokeStyle = document.getElementsByTagName("input")[1].value;
@@ -48,6 +49,7 @@ const Draw = (copying=false) => {
     }
     if(!copying){
         pushFigArray(document.getElementById("figtype").innerText,c,intercept)
+        sendObject(document.getElementById("figtype").innerText,c,intercept)
         console.log(figArray);
     }
 }
@@ -121,6 +123,7 @@ const getRandomStart = (width, height) => {
 }
 
 const DrawTenFigure = (copying=false) => {
+    if (name == null) return null;
     console.log("10")
     const canvas = document.getElementById('myCanvas')
     const c = canvas.getContext('2d')
@@ -146,14 +149,15 @@ const DrawTenFigure = (copying=false) => {
 
         if(!copying){
             pushFigArray(figure2,c,start)
+            sendObject(figure2,c,start)
             console.log(figArray)
         }
     }
 }
 
-const readData = () => {
-    const storage = localStorage.getItem('canvasObjects');
-    const objects = JSON.parse(storage);
+const readData = async (name) => {
+
+    const objects = await queryObjects(name)
     for(const object of objects){
         wholeCanvas.push(object)
     }
@@ -187,6 +191,33 @@ const readData = () => {
     }
 }
 
+const queryObjects = async (name) =>{
+    const doc = {name:name}
+    return fetch(`http://localhost:5000/data2`,{body: JSON.stringify(doc) ,method: "POST", headers: {"Content-type": "application/json; charset=UTF-8"}}).then(function(result) {
+        return result.json();
+    }).then(function(json) {
+        return(json.data)
+    });
+}
+
+const sendObject = async (figure, c, intercept) =>{
+    const data = [intercept[0],intercept[1],figsize,border,document.getElementsByTagName("input")[1].value, document.getElementsByTagName("input")[0].value , figure]
+    // return fetch(`http://localhost:5000/data`,{method:"post", body:"coucou",headers: {"Content-type": "application/json; charset=UTF-8"}}).then(function(result) {
+    //     return result.json();
+    // }).then(function(json) {
+    //     return(json.data)
+    // });
+    const doc = {data: data, user:document.getElementById("name").value}
+    fetch('http://localhost:5000/data', {
+        method: "POST",
+        body: JSON.stringify(doc),
+        headers: {"Content-type": "application/json; charset=UTF-8"}
+    })
+        .then(response => response.json())
+        .then(json => console.log(json))
+.catch(err => console.log(err));
+}
+
 const pushFigArray = (figure, c, intercept) => {
     wholeCanvas.push([intercept[0],intercept[1],figsize,border,document.getElementsByTagName("input")[1].value, document.getElementsByTagName("input")[0].value , figure])
 
@@ -194,9 +225,14 @@ const pushFigArray = (figure, c, intercept) => {
     writeData(figArray)
 }
 
+const Submit = () => {
+    name = document.getElementById("name").value
+    readData(name);
+}
+
 const writeData = () => {
     localStorage.setItem('canvasObjects', JSON.stringify(figArray));
 }
 
-readData();
+
 
