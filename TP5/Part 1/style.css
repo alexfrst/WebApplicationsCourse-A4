@@ -1,0 +1,34 @@
+body {
+    margin: 0 auto;
+}
+
+img {
+    height: 100px;
+    float: right;
+}
+
+span{
+    background-color: #4CAF50;
+}
+.content{
+    margin: 0 auto;
+    width: 50%;
+}
+.article{
+    min-height: 100px;
+    border: #333333 solid 2px;
+}
+
+.header{
+    background-color: #333333;
+    color: #dddddd;
+    font-size: 30px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.searchbar{
+    padding: 18px 0px;
+    width: 80%;
+    margin: 0 auto;
+}
