@@ -5,6 +5,13 @@ let figArray=[]
 let wholeCanvas = []
 const canvas = document.getElementById('myCanvas')
 const c = canvas.getContext('2d')
+let socket = io();
+
+
+socket.on('drawing', function(msg) {
+    readData(msg)
+});
+
 
 document.getElementById("myCanvas").clientWidth = (window.innerWidth-45).toString()+"px";
 document.getElementById("myCanvas").clientHeight = window.innerHeight.toString()+"px";
@@ -48,7 +55,6 @@ const Draw = (copying=false) => {
         DrawCircle(c,intercept);
     }
     if(!copying){
-        pushFigArray(document.getElementById("figtype").innerText,c,intercept)
         sendObject(document.getElementById("figtype").innerText,c,intercept)
         console.log(figArray);
     }
@@ -148,21 +154,17 @@ const DrawTenFigure = (copying=false) => {
         }
 
         if(!copying){
-            pushFigArray(figure2,c,start)
             sendObject(figure2,c,start)
-            console.log(figArray)
         }
     }
 }
 
-const readData = async (name) => {
+const readData = async (packet) => {
+    const objects = JSON.parse(packet).data
 
-    const objects = await queryObjects(name)
-    for(const object of objects){
-        wholeCanvas.push(object)
-    }
+
     console.log(objects)
-    for(const elem of objects){
+    for(const elem of [objects]){
 
         console.log(elem)
         const x = elem[0];
@@ -191,48 +193,15 @@ const readData = async (name) => {
     }
 }
 
-const queryObjects = async (name) =>{
-    const doc = {name:name}
-    return fetch(`http://localhost:5000/data2`,{body: JSON.stringify(doc) ,method: "POST", headers: {"Content-type": "application/json; charset=UTF-8"}}).then(function(result) {
-        return result.json();
-    }).then(function(json) {
-        return(json.data)
-    });
-}
+
 
 const sendObject = async (figure, c, intercept) =>{
     const data = [intercept[0],intercept[1],figsize,border,document.getElementsByTagName("input")[1].value, document.getElementsByTagName("input")[0].value , figure]
-    // return fetch(`http://localhost:5000/data`,{method:"post", body:"coucou",headers: {"Content-type": "application/json; charset=UTF-8"}}).then(function(result) {
-    //     return result.json();
-    // }).then(function(json) {
-    //     return(json.data)
-    // });
     const doc = {data: data, user:document.getElementById("name").value}
-    fetch('http://localhost:5000/data', {
-        method: "POST",
-        body: JSON.stringify(doc),
-        headers: {"Content-type": "application/json; charset=UTF-8"}
-    })
-        .then(response => response.json())
-        .then(json => console.log(json))
-.catch(err => console.log(err));
-}
-
-const pushFigArray = (figure, c, intercept) => {
-    wholeCanvas.push([intercept[0],intercept[1],figsize,border,document.getElementsByTagName("input")[1].value, document.getElementsByTagName("input")[0].value , figure])
-
-    figArray.push([intercept[0],intercept[1],figsize,border,document.getElementsByTagName("input")[1].value, document.getElementsByTagName("input")[0].value , figure])
-    writeData(figArray)
+    socket.emit("drawing",JSON.stringify(doc))
 }
 
 const Submit = () => {
     name = document.getElementById("name").value
-    readData(name);
+    console.log(name)
 }
-
-const writeData = () => {
-    localStorage.setItem('canvasObjects', JSON.stringify(figArray));
-}
-
-
-

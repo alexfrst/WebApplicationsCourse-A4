@@ -48,7 +48,7 @@ app.post("/data",(req,res) => {
     if(req.body && req.body.data && req.body.user && req.body.data.length == 7 ){
         PostFigures(req.body.data,req.body.user);
     }else{
-        res.status(400).send("An error occured make sure you send you data with the key data and the your array length matches 7")
+        res.status(400).send("An error occured make sure you send you data with the key data and that your array length matches 7")
     }
 })
 

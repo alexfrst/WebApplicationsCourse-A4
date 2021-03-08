@@ -1,0 +1,71 @@
+body {
+    font-family: "Helvetica", "Arial", sans-serif;
+    color: #555;
+}
+
+body {
+    line-height: 1.5;
+    padding: 0em 2em 2em;
+}
+
+ h2 {
+    margin-top: 1em;
+    padding-top: 1em;
+}
+
+a {
+    color: #e81c4f;
+}
+img {
+    width: 100%;
+    padding: 1% 2% 5% 2%;
+}
+@media only screen and (max-width: 400px) {
+    body {
+        padding: 0em 0em 0em;
+    }
+}
+
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+    body {
+        margin: 0 auto;
+        max-width: 50em;
+    }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+    body {
+        margin: 0 auto;
+        max-width: 50em;
+    }
+}
+
+.nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.nav li {
+    float: left;
+}
+
+.nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.nav li a:hover {
+    background-color: #111;
+}
+
+
+
+
