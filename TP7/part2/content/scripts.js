@@ -1,10 +1,63 @@
 let border="2px"
 let figsize="40px"
 let figsize2="40px"
+let x=0;
+let y=0;
 let figArray=[]
 let wholeCanvas = []
 const canvas = document.getElementById('myCanvas')
 const c = canvas.getContext('2d')
+let isDrawing = false
+
+function drawLine(x1, y1, x2, y2,send=false) {
+    // using a line between actual point and the last one solves the problem
+    // if you make very fast circles, you will see polygons.
+    // we could make arcs instead of lines to smooth the angles and solve the problem
+    c.beginPath();
+    c.strokeStyle = document.getElementsByTagName("input")[1].value;
+    c.fillStyle = document.getElementsByTagName("input")[0].value;
+    c.moveTo(x1, y1);
+    c.lineTo(x2, y2);
+    c.stroke();
+    c.closePath();
+    if(send){
+        sendLine("Line",c,[x1,y1],x2,y2,true)
+    }
+}
+
+addEventListener('load', () => {
+    canvas.width = innerWidth
+    canvas.height = innerHeight
+})
+
+canvas.addEventListener('mousedown', function(e) {
+    const rect = canvas.getBoundingClientRect()
+    x = e.clientX - rect.left
+    y = e.clientY - rect.top
+    console.log("x: " + x + " y: " + y)
+    isDrawing=true
+})
+
+canvas.addEventListener('mousemove', e => {
+    if (isDrawing === true) {
+        //drawCircleAtCursor(x,y,canvas, e)
+        drawLine(x, y, e.offsetX, e.offsetY,true);
+        x = e.offsetX;
+        y = e.offsetY;
+    }
+});
+
+window.addEventListener('mouseup', e => {
+    if (isDrawing === true) {
+        //drawCircleAtCursor(x,y,canvas, e)
+        drawLine(x, y, e.offsetX, e.offsetY);
+        x = 0;
+        y = 0;
+        isDrawing = false;
+    }
+});
+
+
 let socket = io();
 
 
@@ -13,8 +66,6 @@ socket.on('drawing', function(msg) {
 });
 
 
-document.getElementById("myCanvas").clientWidth = (window.innerWidth-45).toString()+"px";
-document.getElementById("myCanvas").clientHeight = window.innerHeight.toString()+"px";
 let name = null
 document.getElementsByTagName("canvas")[0].style.border="solid black 6px";
 /*
@@ -174,7 +225,10 @@ const readData = async (packet) => {
         const bg = elem[5];
         const bd = elem[4];
         const figure = elem[6];
-
+        if(figure=="Line"){
+            drawLine(x,y,elem[7],elem[8])
+            return null;
+        }
 
         const canvas = document.getElementById('myCanvas')
         const c = canvas.getContext('2d')
@@ -198,6 +252,14 @@ const readData = async (packet) => {
 const sendObject = async (figure, c, intercept) =>{
     const data = [intercept[0],intercept[1],figsize,border,document.getElementsByTagName("input")[1].value, document.getElementsByTagName("input")[0].value , figure]
     const doc = {data: data, user:document.getElementById("name").value}
+    socket.emit("drawing",JSON.stringify(doc))
+}
+
+const sendLine = async (figure, c, intercept,x2,y2) =>{
+    console.log("coucou")
+    const data = [intercept[0],intercept[1],figsize,border,document.getElementsByTagName("input")[1].value, document.getElementsByTagName("input")[0].value , figure,x2,y2]
+    const doc = {data: data, user:document.getElementById("name").value}
+    console.log(data)
     socket.emit("drawing",JSON.stringify(doc))
 }
 
